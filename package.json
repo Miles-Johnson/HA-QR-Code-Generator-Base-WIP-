@@ -1,0 +1,24 @@
+{
+  "name": "hartsy-apps",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@hartsy/ts": "workspace:*",
+    "@repo/eslint-config": "workspace:*",
+    "prettier": "^3.1.1",
+    "turbo": "^1.11.2"
+  },
+  "packageManager": "pnpm@8.9.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@next/mdx": "^14.0.4",
+    "next": "14.1.1-canary.51"
+  }
+}

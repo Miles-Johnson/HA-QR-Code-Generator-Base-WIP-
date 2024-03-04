@@ -1,0 +1,6 @@
+{
+  "extends": "@hartsy/ts/base.json",
+  "compilerOptions": {
+    "strict": false
+  }
+}

@@ -1,0 +1,557 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export interface Database {
+  public: {
+    Tables: {
+      customers: {
+        Row: {
+          id: string
+          stripe_customer_id: string | null
+        }
+        Insert: {
+          id: string
+          stripe_customer_id?: string | null
+        }
+        Update: {
+          id?: string
+          stripe_customer_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customers_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      generations: {
+        Row: {
+          batch: number
+          checkpoint: string
+          comfy_endpoint: string
+          comfy_prompt_id: string
+          created_at: string
+          duration: number | null
+          height: number
+          id: number
+          negative: string | null
+          output_urls: Json | null
+          positive: string | null
+          template_id: number | null
+          user_id: string
+          width: number
+        }
+        Insert: {
+          batch?: number
+          checkpoint: string
+          comfy_endpoint: string
+          comfy_prompt_id: string
+          created_at?: string
+          duration?: number | null
+          height?: number
+          id?: number
+          negative?: string | null
+          output_urls?: Json | null
+          positive?: string | null
+          template_id?: number | null
+          user_id: string
+          width?: number
+        }
+        Update: {
+          batch?: number
+          checkpoint?: string
+          comfy_endpoint?: string
+          comfy_prompt_id?: string
+          created_at?: string
+          duration?: number | null
+          height?: number
+          id?: number
+          negative?: string | null
+          output_urls?: Json | null
+          positive?: string | null
+          template_id?: number | null
+          user_id?: string
+          width?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generations_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      images: {
+        Row: {
+          created_at: string
+          generation_id: number
+          id: number
+          image_url: string
+          likes_count: number
+          template_id: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          generation_id: number
+          id?: number
+          image_url: string
+          likes_count: number
+          template_id?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          generation_id?: number
+          id?: number
+          image_url?: string
+          likes_count?: number
+          template_id?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "images_generation_id_fkey"
+            columns: ["generation_id"]
+            isOneToOne: false
+            referencedRelation: "generations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "images_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "images_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      payments: {
+        Row: {
+          amount_total: number | null
+          created_at: string
+          customer_id: string | null
+          email: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          amount_total?: number | null
+          created_at?: string
+          customer_id?: string | null
+          email?: string | null
+          id: string
+          user_id?: string | null
+        }
+        Update: {
+          amount_total?: number | null
+          created_at?: string
+          customer_id?: string | null
+          email?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      prices: {
+        Row: {
+          active: boolean | null
+          currency: string | null
+          description: string | null
+          id: string
+          interval: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval_count: number | null
+          is_default: boolean | null
+          is_metered: boolean | null
+          metadata: Json | null
+          product_id: string | null
+          trial_period_days: number | null
+          type: Database["public"]["Enums"]["pricing_type"] | null
+          unit_amount: number | null
+        }
+        Insert: {
+          active?: boolean | null
+          currency?: string | null
+          description?: string | null
+          id: string
+          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval_count?: number | null
+          is_default?: boolean | null
+          is_metered?: boolean | null
+          metadata?: Json | null
+          product_id?: string | null
+          trial_period_days?: number | null
+          type?: Database["public"]["Enums"]["pricing_type"] | null
+          unit_amount?: number | null
+        }
+        Update: {
+          active?: boolean | null
+          currency?: string | null
+          description?: string | null
+          id?: string
+          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval_count?: number | null
+          is_default?: boolean | null
+          is_metered?: boolean | null
+          metadata?: Json | null
+          product_id?: string | null
+          trial_period_days?: number | null
+          type?: Database["public"]["Enums"]["pricing_type"] | null
+          unit_amount?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prices_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      products: {
+        Row: {
+          active: boolean | null
+          description: string | null
+          id: string
+          image: string | null
+          metadata: Json | null
+          name: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          description?: string | null
+          id: string
+          image?: string | null
+          metadata?: Json | null
+          name?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          description?: string | null
+          id?: string
+          image?: string | null
+          metadata?: Json | null
+          name?: string | null
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          cancel_at: string | null
+          cancel_at_period_end: boolean | null
+          canceled_at: string | null
+          created: string
+          current_period_end: string
+          current_period_start: string
+          ended_at: string | null
+          id: string
+          metadata: Json | null
+          price_id: string | null
+          quantity: number | null
+          status: Database["public"]["Enums"]["subscription_status"] | null
+          trial_end: string | null
+          trial_start: string | null
+          user_id: string
+        }
+        Insert: {
+          cancel_at?: string | null
+          cancel_at_period_end?: boolean | null
+          canceled_at?: string | null
+          created?: string
+          current_period_end?: string
+          current_period_start?: string
+          ended_at?: string | null
+          id: string
+          metadata?: Json | null
+          price_id?: string | null
+          quantity?: number | null
+          status?: Database["public"]["Enums"]["subscription_status"] | null
+          trial_end?: string | null
+          trial_start?: string | null
+          user_id: string
+        }
+        Update: {
+          cancel_at?: string | null
+          cancel_at_period_end?: boolean | null
+          canceled_at?: string | null
+          created?: string
+          current_period_end?: string
+          current_period_start?: string
+          ended_at?: string | null
+          id?: string
+          metadata?: Json | null
+          price_id?: string | null
+          quantity?: number | null
+          status?: Database["public"]["Enums"]["subscription_status"] | null
+          trial_end?: string | null
+          trial_start?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_price_id_fkey"
+            columns: ["price_id"]
+            isOneToOne: false
+            referencedRelation: "prices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      templates: {
+        Row: {
+          active: boolean
+          checkpoint: string
+          created_at: string
+          description: string | null
+          id: number
+          image_url: string | null
+          name: string
+          negative: string
+          order_rank: number
+          positive: string
+          prompt: string
+          seed: number | null
+          user_id: string | null
+        }
+        Insert: {
+          active?: boolean
+          checkpoint: string
+          created_at?: string
+          description?: string | null
+          id?: number
+          image_url?: string | null
+          name: string
+          negative: string
+          order_rank: number
+          positive: string
+          prompt: string
+          seed?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          active?: boolean
+          checkpoint?: string
+          created_at?: string
+          description?: string | null
+          id?: number
+          image_url?: string | null
+          name?: string
+          negative?: string
+          order_rank?: number
+          positive?: string
+          prompt?: string
+          seed?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "templates_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      users: {
+        Row: {
+          avatar_url: string | null
+          billing_address: Json | null
+          created_at: string | null
+          email: string
+          full_name: string | null
+          id: string
+          likes_count: number | null
+          payment_method: Json | null
+          provider: string | null
+          provider_id: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          billing_address?: Json | null
+          created_at?: string | null
+          email: string
+          full_name?: string | null
+          id: string
+          likes_count?: number | null
+          payment_method?: Json | null
+          provider?: string | null
+          provider_id?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          billing_address?: Json | null
+          created_at?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          likes_count?: number | null
+          payment_method?: Json | null
+          provider?: string | null
+          provider_id?: string | null
+          username?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      pricing_plan_interval: "day" | "week" | "month" | "year"
+      pricing_type: "one_time" | "recurring"
+      subscription_status:
+        | "trialing"
+        | "active"
+        | "canceled"
+        | "incomplete"
+        | "incomplete_expired"
+        | "past_due"
+        | "unpaid"
+        | "paused"
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never

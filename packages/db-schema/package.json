@@ -1,0 +1,24 @@
+{
+  "name": "@hartsy/db",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "source": "./src/index.ts",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "gen": "npx supabase gen types typescript --project-id 'yfixpvzkurnytlvefeos' --schema public > src/supabase.ts && pnpm supabase-to-zod --input src/supabase.ts --output src/schemas.ts",
+    "build": "tsup src/index.ts --dts"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.1",
+    "typescript": "5.3.3",
+    "supabase-to-zod": "^1.0.4"
+  },
+  "dependencies": {
+    "tsup": "^8.0.1",
+    "zod": "^3.22.4"
+  }
+}
